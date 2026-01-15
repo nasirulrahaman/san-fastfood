@@ -18,7 +18,7 @@ const menuData = {
     {name:"Masala Dosa", price:25, img:"images/breakfast/m.jpg"},
     {name:"Butter Naan", price:10, img:"images/breakfast/butter.jpg"},
     {name:"Idly (1 plate)", price:20, img:"images/breakfast/idly.jpg"},
-    {name:"Dal Puri", price:3, img:"images/breakfast/dal.jpg"},
+    {name:"Dal Puri", price:5, img:"images/breakfast/dal.jpg"},
     {name:"Dhuki", price:10, img:"images/breakfast/dhuki.jpg"},
     {name:"Paratha", price:10, img:"images/breakfast/p.jpg"},
     {name:"Chicken Chawmin", price:40, img:"images/breakfast/c.jpg"},
@@ -35,7 +35,7 @@ const menuData = {
     {name:"Chicken Kosa", price:80, img:"images/chicken/kosa.jpg"},
     {name:"Butter Chicken", price:50, img:"images/chicken/butter.jpg"},
     {name:"Chicken Keema", price:40, img:"images/chicken/keema.jpg"},
-    {name:"Chilli Chicken", price:30, img:"images/chicken/chilli.jpg"}
+    {name:"Chilli Chicken", price:50, img:"images/chicken/chilli.jpg"}
   ],
 
   momo: [
@@ -51,7 +51,7 @@ const menuData = {
     {name:"French Fries", price:40, img:"images/snacks/f.jpg"},
     {name:"Beef Tikka", price:5, img:"images/snacks/beef.jpg"},
     {name:"Medu Vada", price:10, img:"images/snacks/m.jpg"},
-    {name:"Dal Vada", price:3, img:"images/snacks/dal.jpg"},
+    {name:"Dal Vada", price:5, img:"images/snacks/dal.jpg"},
     {name:"Mini Samosa (6 piece)", price:20, img:"images/snacks/mini.jpg"},
     {name:"Soya Stick", price:10, img:"images/snacks/soya.jpg"},
     {name:"Sandwich (1 plate)", price:15, img:"images/snacks/sandwich.jpg"},
