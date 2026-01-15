@@ -135,19 +135,18 @@
 <script>
 // Register Service Worker for offline support
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/service-worker.js', { scope: '/' })
+  navigator.serviceWorker.register('./service-worker.js')
     .then(registration => {
       console.log('✅ Service Worker registered:', registration.scope);
       
       // Force activation
-      registration.addEventListener('updatefound', () => {
-        const newWorker = registration.installing;
-        newWorker.addEventListener('statechange', () => {
-          if (newWorker.state === 'activated') {
+      if (registration.installing) {
+        registration.installing.addEventListener('statechange', function() {
+          if (this.state === 'activated') {
             console.log('✅ Service Worker activated!');
           }
         });
-      });
+      }
       
       // Check for updates every 30 seconds
       setInterval(() => {
