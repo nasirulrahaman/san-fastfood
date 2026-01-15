@@ -68,16 +68,19 @@ self.addEventListener('fetch', event => {
     event.respondWith(
       caches.match(request)
         .then(response => {
-          return response || fetch(request)
-            .then(response => {
-              if (response.ok) {
-                caches.open(RUNTIME_CACHE).then(cache => cache.put(request, response.clone()));
-              }
+          if (response) return response;
+          
+          return fetch(request).then(response => {
+            if (response && response.status === 200) {
+              caches.open(RUNTIME_CACHE).then(cache => {
+                cache.put(request, response.clone());
+              });
               return response;
-            });
+            }
+            return response;
+          });
         })
         .catch(() => {
-          // Return placeholder for failed images
           return new Response('Image unavailable', { status: 404 });
         })
     );
