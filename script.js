@@ -77,7 +77,72 @@ const menuData = {
 };
 
 let cart = {};
+let lastSelectedCategory = null; // Store last selected category
+
+/* ================= SEARCH FUNCTIONALITY ================= */
+function handleSearch() {
+  const searchInput = document.getElementById('searchInput');
+  const searchTerm = searchInput.value.trim().toLowerCase();
+  const clearBtn = document.getElementById('clearBtn');
+  const menu = document.getElementById('menu');
+
+  // Show/hide clear button
+  if (searchTerm.length > 0) {
+    clearBtn.style.display = 'inline-block';
+  } else {
+    clearBtn.style.display = 'none';
+    // If search is empty, show the last selected category menu
+    if (lastSelectedCategory) {
+      showMenu(lastSelectedCategory);
+    }
+    return;
+  }
+
+  // Search across all categories
+  const searchResults = [];
+  for (let category in menuData) {
+    menuData[category].forEach(item => {
+      if (item.name.toLowerCase().includes(searchTerm)) {
+        searchResults.push(item);
+      }
+    });
+  }
+
+  // Display search results
+  menu.innerHTML = "";
+  if (searchResults.length === 0) {
+    menu.innerHTML = '<div class="no-results">No items found. Try a different search.</div>';
+  } else {
+    searchResults.forEach(item => {
+      const safeId = item.name.replace(/\s+/g, "_");
+      menu.innerHTML += `
+        <div class="item">
+          <img src="${item.img}">
+          <h3>${item.name}</h3>
+          <p>₹${item.price}</p>
+          <div class="qty">
+            <button onclick="changeQty('${safeId}', '${item.name}', ${item.price}, -1)">−</button>
+            <span id="q-${safeId}">0</span>
+            <button onclick="changeQty('${safeId}', '${item.name}', ${item.price}, 1)">+</button>
+          </div>
+        </div>
+      `;
+    });
+  }
+}
+
+function clearSearch() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('clearBtn').style.display = 'none';
+  if (lastSelectedCategory) {
+    showMenu(lastSelectedCategory);
+  }
+}
+
 function showMenu(category) {
+  lastSelectedCategory = category; // Store the selected category
+  document.getElementById('searchInput').value = ''; // Clear search input
+  document.getElementById('clearBtn').style.display = 'none';
   const menu = document.getElementById("menu");
   menu.innerHTML = "";
 

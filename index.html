@@ -57,9 +57,20 @@
   <button onclick="showMenu('breakfast')">🥞 Breakfast</button>
 </section>
 
-
-
-
+<!-- Search Bar Section -->
+<section class="search-section">
+  <div class="search-container">
+    <span class="search-icon">🔍</span>
+    <input 
+      type="text" 
+      id="searchInput" 
+      class="search-input" 
+      placeholder="Search: biryani, momo, roll..."
+      oninput="handleSearch()"
+    >
+    <button id="clearBtn" class="clear-btn" onclick="clearSearch()" style="display:none;">✕</button>
+  </div>
+</section>
 
 <section id="menu" class="menu"></section>
 
