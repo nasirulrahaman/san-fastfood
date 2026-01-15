@@ -35,7 +35,8 @@ const menuData = {
     {name:"Chicken Kosa", price:80, img:"images/chicken/kosa.jpg"},
     {name:"Butter Chicken", price:50, img:"images/chicken/butter.jpg"},
     {name:"Chicken Keema", price:40, img:"images/chicken/keema.jpg"},
-    {name:"Chilli Chicken", price:50, img:"images/chicken/chilli.jpg"}
+    {name:"Chilli Chicken", price:50, img:"images/chicken/chilli.jpg"},
+    {name:"Chicken Stick ( per stick)", price:20, img:"images/chicken/chi.jpg"}
   ],
 
   momo: [
