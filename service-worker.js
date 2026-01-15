@@ -9,84 +9,72 @@ const STATIC_ASSETS = [
   './manifest.json'
 ];
 
-// Install: Cache static assets
+// Install
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(STATIC_ASSETS).then(() => {
-        self.skipWaiting();
-      });
-    })
+    caches.open(CACHE_NAME).then(cache => cache.addAll(STATIC_ASSETS))
+      .then(() => self.skipWaiting())
   );
 });
 
-// Activate: Clean up old caches
+// Activate
 self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME && cacheName !== RUNTIME_CACHE) {
-            return caches.delete(cacheName);
+    caches.keys().then(names => 
+      Promise.all(
+        names.map(name => {
+          if (name !== CACHE_NAME && name !== RUNTIME_CACHE) {
+            return caches.delete(name);
           }
         })
-      );
-    }).then(() => {
-      self.clients.claim();
-    })
+      )
+    ).then(() => self.clients.claim())
   );
 });
 
-// Fetch: Network first, fallback to cache
+// Fetch
 self.addEventListener('fetch', event => {
   const { request } = event;
 
-  if (request.method !== 'GET') {
-    return;
-  }
+  if (request.method !== 'GET') return;
 
-  // For HTML pages: network first, fallback to cache
-  if (request.headers.get('accept').includes('text/html')) {
+  // HTML: network first
+  if (request.headers.get('accept')?.includes('text/html')) {
     event.respondWith(
-      fetch(request)
-        .then(response => {
-          if (response.ok) {
-            const clone = response.clone();
-            caches.open(CACHE_NAME).then(cache => cache.put(request, clone));
-          }
-          return response;
-        })
-        .catch(() => caches.match(request))
+      fetch(request).then(response => {
+        if (response?.ok) {
+          caches.open(CACHE_NAME).then(cache => cache.put(request, response.clone()));
+        }
+        return response;
+      }).catch(() => caches.match(request))
     );
     return;
   }
 
-  // For images & media: cache first
+  // Images: cache first
   if (request.destination === 'image' || request.destination === 'media') {
     event.respondWith(
-      caches.match(request).then(cachedResponse => {
-        if (cachedResponse) {
-          return cachedResponse;
-        }
-        return fetch(request).then(fetchResponse => {
-          if (!fetchResponse || fetchResponse.status !== 200 || fetchResponse.type === 'error') {
-            return fetchResponse;
+      caches.match(request).then(async cached => {
+        if (cached) return cached;
+        try {
+          const response = await fetch(request);
+          if (response?.status === 200) {
+            const cache = await caches.open(RUNTIME_CACHE);
+            cache.put(request, response.clone());
           }
-          const responseToCache = fetchResponse.clone();
-          caches.open(RUNTIME_CACHE).then(cache => {
-            cache.put(request, responseToCache);
-          });
-          return fetchResponse;
-        });
-      }).catch(() => new Response('Image unavailable', { status: 404 }))
+          return response;
+        } catch {
+          return new Response('Unavailable', { status: 404 });
+        }
+      })
     );
     return;
   }
 
-  // For everything else: cache first, fallback to network
+  // Everything else: cache first
   event.respondWith(
     caches.match(request)
-      .then(response => response || fetch(request))
-      .catch(() => new Response('Offline - resource unavailable', { status: 503 }))
+      .then(cached => cached || fetch(request))
+      .catch(() => new Response('Offline', { status: 503 }))
   );
 });
