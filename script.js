@@ -190,27 +190,26 @@ window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
 
-  // show banner
   const banner = document.getElementById('installBanner');
   if (banner) banner.style.display = 'block';
 });
 
-const installBtn = document.getElementById('installBtn');
-if (installBtn) {
-  installBtn.addEventListener('click', async () => {
-    if (!deferredPrompt) return;
-
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-
-    if (outcome === 'accepted') {
-      const banner = document.getElementById('installBanner');
-      if (banner) banner.style.display = 'none';
-    }
-
-    deferredPrompt = null;
-  });
-}
+// Wait for DOM to be ready
+document.addEventListener('DOMContentLoaded', () => {
+  const installBtn = document.getElementById('installBtn');
+  if (installBtn) {
+    installBtn.addEventListener('click', async () => {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        const banner = document.getElementById('installBanner');
+        if (banner) banner.style.display = 'none';
+      }
+      deferredPrompt = null;
+    });
+  }
+});
 function updateFloatingCart() {
   let totalItems = 0;
   let totalPrice = 0;

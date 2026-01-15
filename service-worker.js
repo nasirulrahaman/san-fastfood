@@ -64,20 +64,21 @@ self.addEventListener('fetch', event => {
   // For images & media: cache first
   if (request.destination === 'image' || request.destination === 'media') {
     event.respondWith(
-      caches.match(request)
-        .then(response => {
-          if (response) return response;
-          return fetch(request).then(response => {
-            if (response && response.status === 200) {
-              const clone = response.clone();
-              caches.open(RUNTIME_CACHE).then(cache => {
-                cache.put(request, clone);
-              });
-            }
-            return response;
+      caches.match(request).then(cachedResponse => {
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+        return fetch(request).then(fetchResponse => {
+          if (!fetchResponse || fetchResponse.status !== 200 || fetchResponse.type === 'error') {
+            return fetchResponse;
+          }
+          const responseToCache = fetchResponse.clone();
+          caches.open(RUNTIME_CACHE).then(cache => {
+            cache.put(request, responseToCache);
           });
-        })
-        .catch(() => new Response('Image unavailable', { status: 404 }))
+          return fetchResponse;
+        });
+      }).catch(() => new Response('Image unavailable', { status: 404 }))
     );
     return;
   }
