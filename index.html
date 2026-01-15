@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#c89b3c">
+
+  <title>SAN FASTFOOD</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="particles"></div>
+<div class="bg-particles"></div>
+
+<div class="app">
+  
+
+
+<header class="hero">
+  <div class="hero-glass">
+    <h1>SAN FASTFOOD</h1>
+    <p class="tagline">Premium Taste • Fast Delivery</p>
+
+    <button class="hero-btn" onclick="scrollToMenu()">
+      🍽️ Order Now
+    </button>
+
+    <div class="hero-note">
+      <span>💰 50% advance required</span>
+      <span>🚚 Balance payable at delivery</span>
+    </div>
+  </div>
+</header>
+
+
+<section class="categories">
+  <button onclick="showMenu('rice')">🍚 Rice</button>
+  <button onclick="showMenu('chicken')">🍗 Chicken</button>
+  <button onclick="showMenu('snacks')">🍟 Snacks</button>
+  <button onclick="showMenu('rolls')">🌯 Rolls</button>
+  <button onclick="showMenu('momo')">🥟 Momo</button>
+  <button onclick="showMenu('drinks')">🥤 Drinks</button>
+  <button onclick="showMenu('breakfast')">🥞 Breakfast</button>
+</section>
+
+
+
+
+
+<section id="menu" class="menu"></section>
+
+<div class="cart-btn">
+  <button onclick="openCart()">🛒 View Cart</button>
+</div>
+
+<div id="cart" class="cart hidden">
+  <h2>Your Order</h2>
+
+  <div class="cart-form">
+    <input type="text" id="custName" placeholder="Your Name">
+    <textarea id="custAddress" placeholder="Delivery Address"></textarea>
+  </div>
+
+  <div id="cartItems" class="cart-items"></div>
+
+  <h3 id="total"></h3>
+
+  <div class="checkout-note">
+    <p>💰 50% advance payment required</p>
+    <p>🚚 Balance payable at delivery</p>
+  </div>
+
+  <div class="cart-actions">
+    <button onclick="orderWhatsApp()">Order on WhatsApp</button>
+    <button onclick="closeCart()">Close</button>
+  </div>
+</div>
+
+
+
+<script src="script.js"></script>
+<footer>
+  <p>📍 Dakshin Baguan, Chanserpur, Tatultala Mor, Ganna Para</p>
+  <p>📞 7001728030 | 8293062407</p>
+</footer>
+</div>
+<div id="installBanner" style="
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #111;
+  color: #fff;
+  padding: 14px 18px;
+  border-radius: 12px;
+  display: none;
+  z-index: 9999;
+  box-shadow: 0 10px 30px rgba(0,0,0,.4);
+  text-align: center;
+">
+  <p style="margin:0 0 10px;font-size:14px;">
+    📱 Install <b>SAN App</b> for faster ordering
+  </p>
+  <button id="installBtn" style="
+    background:#C9A24D;
+    color:#000;
+    border:none;
+    padding:8px 16px;
+    border-radius:8px;
+    font-weight:600;
+  ">
+    Install App
+  </button>
+</div>
+<div id="floating-cart" onclick="openCart()">
+  <span id="cart-summary">🛒 0 items | ₹0</span>
+  <span class="view-text">View Cart</span>
+</div>
+
+</body>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/service-worker.js');
+}
+</script>
+</html>
+
