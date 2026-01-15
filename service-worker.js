@@ -2,11 +2,11 @@ const CACHE_NAME = 'san-cache-v1';
 const RUNTIME_CACHE = 'san-runtime-cache-v1';
 
 const STATIC_ASSETS = [
-  '/',
-  '/index.html',
-  '/style.css',
-  '/script.js',
-  '/manifest.json'
+  './',
+  './index.html',
+  './style.css',
+  './script.js',
+  './manifest.json'
 ];
 
 // Install: Cache static assets
@@ -14,7 +14,7 @@ self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
       return cache.addAll(STATIC_ASSETS).then(() => {
-        self.skipWaiting(); // Activate immediately
+        self.skipWaiting();
       });
     })
   );
@@ -32,7 +32,7 @@ self.addEventListener('activate', event => {
         })
       );
     }).then(() => {
-      self.clients.claim(); // Claim all clients
+      self.clients.claim();
     })
   );
 });
@@ -40,9 +40,7 @@ self.addEventListener('activate', event => {
 // Fetch: Network first, fallback to cache
 self.addEventListener('fetch', event => {
   const { request } = event;
-  const url = new URL(request.url);
 
-  // Skip non-GET requests
   if (request.method !== 'GET') {
     return;
   }
@@ -69,20 +67,17 @@ self.addEventListener('fetch', event => {
       caches.match(request)
         .then(response => {
           if (response) return response;
-          
           return fetch(request).then(response => {
             if (response && response.status === 200) {
+              const clone = response.clone();
               caches.open(RUNTIME_CACHE).then(cache => {
-                cache.put(request, response.clone());
+                cache.put(request, clone);
               });
-              return response;
             }
             return response;
           });
         })
-        .catch(() => {
-          return new Response('Image unavailable', { status: 404 });
-        })
+        .catch(() => new Response('Image unavailable', { status: 404 }))
     );
     return;
   }
