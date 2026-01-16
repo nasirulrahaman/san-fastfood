@@ -82,7 +82,7 @@ const menuData = {
   drinks: [
     {name:"Tea", price:5, img:"images/drinks/t.jpg"},
     {name:"Coffee", price:10, img:"images/drinks/c.jpg"},
-    {name:"Lassi", price:15, img:"images/drinks/l.jpg"}
+    {name:"Lassi", price:25, img:"images/drinks/l.jpg"}
   ]
 };
 
@@ -542,4 +542,5 @@ function closeCart() {
   
   // Restore body scroll
   document.body.style.overflow = "";
+
 }
