@@ -426,6 +426,22 @@ function orderWhatsApp() {
   message += `\n\n💰 50% advance payment required`;
   message += `\n🚚 Balance payable at delivery`;
 
+  // Save order to Supabase (async, non-blocking)
+  saveOrderToSupabase({
+    customer_name: name,
+    customer_address: address,
+    items: cart,
+    total_amount: total
+  }).then(result => {
+    if (result.success) {
+      console.log('✅ Order saved to Supabase');
+    } else {
+      console.warn('⚠️ Order not saved to Supabase:', result.error);
+    }
+  }).catch(err => {
+    console.error('❌ Supabase save error:', err);
+  });
+
   // Save order to Firestore (async)
   saveOrderToFirestore({
     orderId,

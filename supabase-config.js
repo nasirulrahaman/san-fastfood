@@ -78,8 +78,10 @@ function loadSupabaseViaScript() {
 
 // Initialize when DOM is ready
 if (document.readyState === 'loading') {
+  console.log('🚀 DOM loading - will init Supabase on DOMContentLoaded');
   document.addEventListener('DOMContentLoaded', initSupabase);
 } else {
+  console.log('🚀 DOM already loaded - init Supabase now');
   initSupabase();
 }
 
@@ -92,9 +94,15 @@ if (document.readyState === 'loading') {
  */
 async function saveOrderToSupabase(orderData) {
   try {
+    console.log('📝 Attempting to save order to Supabase...');
+    console.log('Order data:', orderData);
+    
     // Check if Supabase is initialized
     if (!supabase) {
-      console.warn('⚠️ Supabase not initialized yet');
+      console.warn('⚠️ Supabase not initialized yet - checking status');
+      console.log('supabaseInitialized:', supabaseInitialized);
+      console.log('SUPABASE_URL:', SUPABASE_URL);
+      console.log('SUPABASE_ANON_KEY exists:', !!SUPABASE_ANON_KEY);
       return { success: false, error: 'Supabase not ready' };
     }
 

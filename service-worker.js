@@ -41,6 +41,12 @@ self.addEventListener('fetch', event => {
   // Skip chrome-extension and non-http requests
   if (!request.url.startsWith('http')) return;
 
+  // Skip Supabase API calls - don't cache dynamic data
+  if (request.url.includes('supabase.co')) {
+    event.respondWith(fetch(request));
+    return;
+  }
+
   // HTML: network first
   if (request.headers.get('accept')?.includes('text/html')) {
     event.respondWith(
