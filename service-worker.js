@@ -38,12 +38,16 @@ self.addEventListener('fetch', event => {
 
   if (request.method !== 'GET') return;
 
+  // Skip chrome-extension and non-http requests
+  if (!request.url.startsWith('http')) return;
+
   // HTML: network first
   if (request.headers.get('accept')?.includes('text/html')) {
     event.respondWith(
       fetch(request).then(response => {
         if (response?.ok) {
-          caches.open(CACHE_NAME).then(cache => cache.put(request, response.clone()));
+          const cache = caches.open(CACHE_NAME);
+          cache.then(c => c.put(request, response.clone()));
         }
         return response;
       }).catch(() => caches.match(request))
@@ -58,7 +62,7 @@ self.addEventListener('fetch', event => {
         if (cached) return cached;
         try {
           const response = await fetch(request);
-          if (response?.status === 200) {
+          if (response?.ok && response?.status === 200) {
             const cache = await caches.open(RUNTIME_CACHE);
             cache.put(request, response.clone());
           }
@@ -78,4 +82,3 @@ self.addEventListener('fetch', event => {
       .catch(() => new Response('Offline', { status: 503 }))
   );
 });
-

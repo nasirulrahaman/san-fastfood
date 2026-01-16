@@ -501,8 +501,29 @@ function updateFloatingCart() {
 }
 
 function openCart() {
-  document.getElementById("cart").classList.remove("hidden");
+  const cartModal = document.getElementById("cart");
+  const backdrop = document.getElementById("cart-backdrop");
+  const floatingCart = document.getElementById("floating-cart");
+  
+  cartModal.classList.remove("hidden");
+  if (backdrop) backdrop.classList.remove("hidden");
+  if (floatingCart) floatingCart.style.display = "none";
+  
+  // Prevent body scroll when modal is open
+  document.body.style.overflow = "hidden";
 }
+
 function closeCart() {
-  document.getElementById("cart").classList.add("hidden");
+  const cartModal = document.getElementById("cart");
+  const backdrop = document.getElementById("cart-backdrop");
+  const floatingCart = document.getElementById("floating-cart");
+  
+  cartModal.classList.add("hidden");
+  if (backdrop) backdrop.classList.add("hidden");
+  if (floatingCart && floatingCart.classList.contains("visible")) {
+    floatingCart.style.display = "";
+  }
+  
+  // Restore body scroll
+  document.body.style.overflow = "";
 }
