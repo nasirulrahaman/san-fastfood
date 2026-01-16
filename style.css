@@ -783,6 +783,17 @@ button:hover {
   opacity: 0.9;
 }
 
+.tagline-hindi {
+  margin-top: 6px;
+  font-size: 15px;
+  opacity: 1;
+  color: #E8D5B7;
+  font-style: italic;
+  letter-spacing: 1px;
+  font-weight: 600;
+  text-shadow: 0 2px 8px rgba(201, 162, 77, 0.4);
+}
+
 .hero-btn {
   margin-top: 20px;
   padding: 14px 26px;

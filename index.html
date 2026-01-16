@@ -12,7 +12,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="SAN FASTFOOD">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://wa.me">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://wa.me https://ajijgjwlsnqggjrinqqp.supabase.co https://*.supabase.co">
   <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
   
   <!-- Favicon -->
@@ -34,6 +34,7 @@
   <div class="hero-glass">
     <h1>SAN FASTFOOD</h1>
     <p class="tagline">Premium Taste • Fast Delivery</p>
+    <p class="tagline-hindi">Swaad Aisa ki Ghar jaisa</p>
 
     <button class="hero-btn" onclick="scrollToMenu()">
       🍽️ Order Now
@@ -101,8 +102,12 @@
   </div>
 </div>
 
+<!-- Cart Modal Backdrop -->
+<div id="cart-backdrop" class="cart-backdrop hidden" onclick="closeCart()"></div>
 
 
+
+<script src="supabase-config.js"></script>
 <script src="script.js"></script>
 <footer>
   <p>📍 Dakshin Baguan, Chanserpur, Tatultala Mor, Ganna Para</p>
