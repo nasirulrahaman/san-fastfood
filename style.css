@@ -363,6 +363,7 @@ button:hover {
   z-index: 999;
   max-height: 90vh;
   overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .cart h2 {
@@ -434,6 +435,9 @@ button:hover {
   transition: all 0.3s ease;
   width: 100%;
   box-sizing: border-box;
+  min-height: 48px;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .cart-form input::placeholder,
@@ -581,26 +585,48 @@ button:hover {
   .cart {
     width: 95%;
     max-width: 100%;
-    padding: 20px;
+    padding: 20px 20px max(20px, env(safe-area-inset-bottom));
     top: auto;
     bottom: 0;
     transform: none;
     border-radius: 20px 20px 0 0;
-    max-height: 85vh;
+    max-height: calc(100vh - 20px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+  }
+
+  .cart-form {
+    gap: 14px;
   }
 
   .cart-form input,
   .cart-form textarea {
-    padding: 14px;
+    padding: 16px;
     font-size: 16px;
+    min-height: 48px;
   }
 
   .cart-form textarea {
-    min-height: 90px;
+    min-height: 100px;
+    max-height: 120px;
   }
 
   #cartItems {
     max-height: 150px;
+  }
+
+  .cart h2 {
+    margin-top: 0;
+    margin-bottom: 14px;
+  }
+
+  .checkout-note {
+    margin: 14px 0;
+  }
+
+  .cart-actions {
+    margin-bottom: 8px;
   }
 }
 
