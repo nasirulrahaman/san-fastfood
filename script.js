@@ -1,5 +1,14 @@
 console.log("JS loaded");
 
+// ===== FIREBASE (OPTIONAL - will gracefully fail if unavailable) =====
+let db = null;
+let collection = null;
+let addDoc = null;
+let serverTimestamp = null;
+
+// Note: Firebase imports are skipped for now - localStorage is used instead
+// To enable Firebase, set up credentials in firebase-config.js and uncommentiates below
+
 const menuData = {
 
   rice: [
@@ -141,18 +150,54 @@ function clearSearch() {
 }
 
 function showMenu(category) {
+  // Validate category exists in menuData
+  if (!category || !menuData[category]) {
+    console.warn(`❌ Category not found: "${category}". Available categories:`, Object.keys(menuData));
+    document.getElementById("menu").innerHTML = `
+      <div class="empty-message" style="padding: 40px; text-align: center; opacity: 0.6;">
+        Category not available. Please select another.
+      </div>
+    `;
+    return;
+  }
+
+  const items = menuData[category];
+
+  // Validate items array exists and has content
+  if (!Array.isArray(items) || items.length === 0) {
+    console.warn(`⚠️ No items found in category: "${category}"`);
+    document.getElementById("menu").innerHTML = `
+      <div class="empty-message" style="padding: 40px; text-align: center; opacity: 0.6;">
+        No items in this category.
+      </div>
+    `;
+    return;
+  }
+
   lastSelectedCategory = category; // Store the selected category
   document.getElementById('searchInput').value = ''; // Clear search input
   document.getElementById('clearBtn').style.display = 'none';
   const menu = document.getElementById("menu");
   menu.innerHTML = "";
 
-  menuData[category].forEach(item => {
+  // Update active category button
+  document.querySelectorAll('.categories button').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  event?.target?.classList.add('active');
+
+  items.forEach(item => {
+    // Validate item has required fields
+    if (!item.name || !item.price) {
+      console.warn('⚠️ Invalid item (missing name or price):', item);
+      return; // Skip this item
+    }
+
     const safeId = item.name.replace(/\s+/g, "_");
 
     menu.innerHTML += `
       <div class="item">
-        <img src="${item.img}">
+        <img src="${item.img}" alt="${item.name}">
         <h3>${item.name}</h3>
         <p>₹${item.price}</p>
         <div class="qty">
@@ -163,6 +208,8 @@ function showMenu(category) {
       </div>
     `;
   });
+
+  console.log(`✅ Menu loaded: "${category}" (${items.length} items)`);
 }
 
 function changeQty(id, name, price, delta) {
@@ -207,7 +254,141 @@ function closeCart() {
   document.getElementById("cart").classList.add("hidden");
 }
 
+/* ================= FIRESTORE ORDER FUNCTIONS ================= */
+
+/**
+ * Save order to Firestore database
+ */
+async function saveOrderToFirestore(orderData) {
+  try {
+    // Skip if Firebase is not available
+    if (!db || !collection || !addDoc || !serverTimestamp) {
+      console.log("ℹ️ Firebase not available, skipping Firestore save");
+      return null;
+    }
+
+    // Convert cart object to array format for Firestore
+    const itemsArray = Object.keys(orderData.items).map(itemKey => ({
+      name: orderData.items[itemKey].name,
+      quantity: orderData.items[itemKey].qty,
+      price: orderData.items[itemKey].price,
+      subtotal: orderData.items[itemKey].qty * orderData.items[itemKey].price
+    }));
+
+    // Prepare order document
+    const orderDoc = {
+      orderId: orderData.orderId,
+      customerName: orderData.customerName,
+      customerAddress: orderData.customerAddress,
+      items: itemsArray,
+      totalAmount: orderData.total,
+      timestamp: serverTimestamp(), // Firebase server timestamp
+      createdAt: new Date().toLocaleString(),
+      status: "pending" // pending, confirmed, delivered
+    };
+
+    // Save to Firestore 'orders' collection
+    const docRef = await addDoc(collection(db, "orders"), orderDoc);
+    console.log("✅ Order saved to Firestore with ID:", docRef.id);
+    return docRef.id;
+  } catch (error) {
+    console.error("❌ Error saving order to Firestore:", error);
+    // Don't block user - still allow WhatsApp redirect even if Firestore fails
+    return null;
+  }
+}
+
 /* ================= WHATSAPP ORDER ================= */
+
+function generateOrderId() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const random = Math.floor(Math.random() * 100000).toString().padStart(5, '0');
+  return `SAN-${year}${month}${day}-${random}`;
+}
+
+/* ================= STATS & ADMIN FUNCTIONS (LOCAL DEVICE ONLY) ================= */
+
+/**
+ * Save order statistics to localStorage (DEVICE ONLY)
+ * This only tracks stats from this specific browser/device
+ */
+function saveOrderStats(orderData) {
+  try {
+    // Validate order data
+    if (!orderData || !orderData.items || orderData.total === undefined) {
+      console.warn('⚠️ Invalid order data for stats:', orderData);
+      return;
+    }
+
+    // Get existing stats from localStorage
+    let stats = {
+      totalOrders: 0,
+      totalRevenue: 0,
+      lastOrderTime: null,
+      itemCounts: {},
+      orders: [] // Store full order records
+    };
+
+    // Try to parse existing stats
+    try {
+      const stored = localStorage.getItem('san_stats');
+      if (stored) {
+        stats = JSON.parse(stored);
+      }
+    } catch (parseError) {
+      console.warn('⚠️ Could not parse existing stats, starting fresh:', parseError);
+      // Continue with fresh stats
+    }
+
+    // Ensure data integrity
+    if (typeof stats.totalOrders !== 'number') stats.totalOrders = 0;
+    if (typeof stats.totalRevenue !== 'number') stats.totalRevenue = 0;
+    if (typeof stats.itemCounts !== 'object') stats.itemCounts = {};
+    if (!Array.isArray(stats.orders)) stats.orders = [];
+
+    // Update counters
+    stats.totalOrders = (stats.totalOrders || 0) + 1;
+    stats.totalRevenue = (stats.totalRevenue || 0) + orderData.total;
+    stats.lastOrderTime = orderData.timestamp;
+
+    // Update item counts
+    for (let itemKey in orderData.items) {
+      const item = orderData.items[itemKey];
+      if (item && item.qty > 0) {
+        // Use actual item name if available, otherwise use key
+        const itemName = item.name || itemKey;
+        if (!stats.itemCounts[itemName]) {
+          stats.itemCounts[itemName] = 0;
+        }
+        stats.itemCounts[itemName] = (stats.itemCounts[itemName] || 0) + item.qty;
+      }
+    }
+
+    // Store full order record (keep last 100 orders)
+    stats.orders.unshift({
+      orderId: orderData.orderId,
+      timestamp: orderData.timestamp,
+      total: orderData.total,
+      items: orderData.items
+    });
+    if (stats.orders.length > 100) {
+      stats.orders = stats.orders.slice(0, 100);
+    }
+
+    // Save updated stats
+    localStorage.setItem('san_stats', JSON.stringify(stats));
+    console.log('✅ Order stats saved (device only):', stats);
+
+    // Notify admin panel if it's open
+    window.dispatchEvent(new CustomEvent('statsUpdated', { detail: stats }));
+
+  } catch (error) {
+    console.error('❌ Error saving order stats:', error);
+  }
+}
 
 function orderWhatsApp() {
   if (Object.keys(cart).length === 0) {
@@ -223,8 +404,14 @@ function orderWhatsApp() {
     return;
   }
 
+  const orderId = generateOrderId();
+  const now = new Date();
+  const timestamp = now.toLocaleString();
+
   let total = 0;
   let message = `Hello SAN FASTFOOD 👋\n\n`;
+  message += `Order ID: ${orderId}\n`;
+  message += `Timestamp: ${timestamp}\n\n`;
   message += `Name: ${name}\n`;
   message += `Address: ${address}\n\n`;
   message += `My Order:\n`;
@@ -238,6 +425,23 @@ function orderWhatsApp() {
   message += `\nTotal: ₹${total}`;
   message += `\n\n💰 50% advance payment required`;
   message += `\n🚚 Balance payable at delivery`;
+
+  // Save order to Firestore (async)
+  saveOrderToFirestore({
+    orderId,
+    customerName: name,
+    customerAddress: address,
+    total,
+    items: cart
+  });
+
+  // Save order stats to localStorage (for backwards compatibility)
+  saveOrderStats({
+    orderId,
+    timestamp,
+    total,
+    items: cart
+  });
 
   const phone = "918293062407";
   const encodedMsg = encodeURIComponent(message);
@@ -302,5 +506,3 @@ function openCart() {
 function closeCart() {
   document.getElementById("cart").classList.add("hidden");
 }
-
-
