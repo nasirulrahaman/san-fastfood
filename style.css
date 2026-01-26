@@ -89,13 +89,17 @@ header p {
   display: block;
   -webkit-appearance: none;
   appearance: none;
+  
+  /* Subtle depth */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .search-input:focus {
   outline: none;
   border-color: #C9A24D;
   background: white;
-  box-shadow: 0 4px 12px rgba(201, 162, 77, 0.15);
+  box-shadow: 0 6px 20px rgba(201, 162, 77, 0.25);
+  transform: translateY(-2px);
 }
 
 .search-input::placeholder {
@@ -244,12 +248,31 @@ button {
   padding: 10px 16px;
   border-radius: 10px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
+  position: relative;
+  font-weight: 500;
+  
+  /* 3D Button Effect */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-button:hover {
-  box-shadow: 0 0 20px gold;
-  transform: scale(1.05);
+/* Desktop: Hover & Active States */
+@media (hover: hover) {
+  button:hover {
+    box-shadow: 0 8px 20px rgba(245, 197, 66, 0.3);
+    transform: translateY(-2px);
+  }
+  
+  button:active {
+    transform: translateY(0px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* Mobile: Tap Effect */
+button:active {
+  transform: scale(0.96);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 .category-btn.active {
   background: gold;
@@ -282,6 +305,7 @@ button:hover {
   padding: 12px 0;
   margin-bottom: 24px;
   scroll-behavior: smooth;
+  perspective: 1000px;
 }
 
 .categories::-webkit-scrollbar {
@@ -301,12 +325,26 @@ button:hover {
   cursor: pointer;
   transition: all 0.3s ease;
   white-space: nowrap;
+  
+  /* 3D Raised Effect */
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.categories button:hover {
-  border-color: var(--gold);
-  background: rgba(245, 197, 66, 0.05);
-  transform: translateY(-2px);
+/* Desktop: Hover Lift & Glow */
+@media (hover: hover) {
+  .categories button:hover {
+    border-color: var(--gold);
+    background: rgba(245, 197, 66, 0.08);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(245, 197, 66, 0.2);
+  }
+}
+
+/* Mobile: Tap Effect */
+.categories button:active {
+  transform: translateY(-2px) scale(0.98);
+  box-shadow: 0 6px 16px rgba(245, 197, 66, 0.15);
 }
 
 .categories button.active {
@@ -314,7 +352,8 @@ button:hover {
   color: #000;
   font-weight: 700;
   border-color: var(--gold);
-  box-shadow: 0 6px 20px rgba(245, 197, 66, 0.3);
+  box-shadow: 0 8px 24px rgba(245, 197, 66, 0.4);
+  transform: translateY(-2px);
 }
 
 /* ===== MENU GRID ===== */
@@ -332,18 +371,61 @@ button:hover {
   padding: 12px;
   text-align: center;
   backdrop-filter: blur(12px);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition: all 0.25s ease;
+  
+  /* 3D Effects */
+  perspective: 1200px;
+  transform-style: preserve-3d;
+  position: relative;
+  overflow: hidden;
 }
 
-.item:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+/* Desktop: Hover 3D Tilt Effect */
+@media (hover: hover) {
+  .item:hover {
+    transform: translateY(-8px) rotateX(4deg) rotateY(-4deg) scale(1.03);
+    box-shadow: var(--shadow-deep);
+    border-color: var(--gold);
+  }
+  
+  .item:hover::before {
+    opacity: 1;
+  }
+  
+  .item:hover img {
+    transform: scale(1.08) translateZ(20px);
+  }
+}
+
+/* Mobile: Tap effect without hover */
+.item.active-tap {
+  transform: scale(1.02) translateY(-6px);
+  box-shadow: var(--shadow-medium);
+  border-color: var(--gold);
+}
+
+/* Subtle depth layer */
+.item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, 
+    rgba(245, 197, 66, 0.05) 0%,
+    rgba(245, 197, 66, 0) 50%,
+    rgba(245, 197, 66, 0.05) 100%
+  );
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  border-radius: 18px;
 }
 
 .item img {
   height: 140px;
   border-radius: 14px;
   margin-bottom: 8px;
+  transition: transform 0.3s ease;
+  transform-style: preserve-3d;
 }
 
 /* ===== CART BACKDROP ===== */
@@ -355,16 +437,23 @@ button:hover {
   height: 100%;
   background: rgba(0, 0, 0, 0.6);
   z-index: 998;
-  animation: fadeIn 0.3s ease;
+  animation: fadeInBlur 0.3s ease;
+  backdrop-filter: blur(3px);
 }
 
 .cart-backdrop.hidden {
   display: none;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+@keyframes fadeInBlur {
+  from { 
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to { 
+    opacity: 1;
+    backdrop-filter: blur(3px);
+  }
 }
 
 /* ===== CART ===== */
@@ -384,17 +473,21 @@ button:hover {
   max-height: 90vh;
   overflow-y: auto;
   overscroll-behavior: contain;
-  animation: slideUp 0.3s ease;
+  animation: slideUpDepth 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  
+  /* 3D Layering */
+  perspective: 1200px;
+  transform-style: preserve-3d;
 }
 
-@keyframes slideUp {
+@keyframes slideUpDepth {
   from {
     opacity: 0;
-    transform: translate(-50%, calc(-50% + 30px));
+    transform: translate(-50%, calc(-50% + 40px)) scale(0.95) rotateX(10deg);
   }
   to {
     opacity: 1;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) scale(1) rotateX(0deg);
   }
 }
 
@@ -402,6 +495,7 @@ button:hover {
   font-size: 20px;
   margin-bottom: 16px;
   color: var(--gold);
+  text-shadow: 0 2px 8px rgba(245, 197, 66, 0.2);
 }
 
 .hidden {
@@ -556,7 +650,11 @@ button:hover {
   border: none;
   border-radius: 10px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
+  position: relative;
+  
+  /* 3D Button Effect */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .cart-actions button:first-child {
@@ -564,9 +662,16 @@ button:hover {
   color: #000;
 }
 
-.cart-actions button:first-child:hover {
-  transform: scale(1.02);
-  box-shadow: 0 0 20px rgba(245, 197, 66, 0.4);
+@media (hover: hover) {
+  .cart-actions button:first-child:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(245, 197, 66, 0.4);
+  }
+  
+  .cart-actions button:first-child:active {
+    transform: translateY(0px);
+    box-shadow: 0 2px 8px rgba(245, 197, 66, 0.2);
+  }
 }
 
 .cart-actions button:last-child {
@@ -575,8 +680,17 @@ button:hover {
   border: 1px solid var(--border-soft);
 }
 
-.cart-actions button:last-child:hover {
-  background: rgba(255, 255, 255, 0.15);
+@media (hover: hover) {
+  .cart-actions button:last-child:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.1);
+  }
+  
+  .cart-actions button:last-child:active {
+    transform: translateY(0px);
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.05);
+  }
 }
 
 /* Fix mobile alignment */
@@ -728,6 +842,7 @@ button:hover {
   gap: 8px;
   justify-content: center;
   margin-top: 8px;
+  perspective: 1000px;
 }
 
 .qty button {
@@ -737,6 +852,21 @@ button:hover {
   background: var(--gold-soft);
   color: var(--gold);
   font-size: 18px;
+  transition: all 0.2s ease;
+  box-shadow: 0 3px 8px rgba(245, 197, 66, 0.15);
+}
+
+@media (hover: hover) {
+  .qty button:hover {
+    background: rgba(245, 197, 66, 0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(245, 197, 66, 0.25);
+  }
+  
+  .qty button:active {
+    transform: translateY(0px) scale(0.95);
+    box-shadow: 0 2px 6px rgba(245, 197, 66, 0.1);
+  }
 }
 
 .qty span {
@@ -757,6 +887,7 @@ button:hover {
     #8a6b2f
   );
   padding: 20px;
+  perspective: 1200px;
 }
 
 .hero-glass {
@@ -768,6 +899,15 @@ button:hover {
   max-width: 520px;
   width: 100%;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  
+  /* 3D Depth */
+  transform-style: preserve-3d;
+  animation: floatHero 3s ease-in-out infinite;
+}
+
+@keyframes floatHero {
+  0%, 100% { transform: translateZ(0px) translateY(0px); }
+  50% { transform: translateZ(10px) translateY(-4px); }
 }
 
 .hero h1 {
@@ -775,6 +915,7 @@ button:hover {
   letter-spacing: 3px;
   margin: 0;
   color: #fff;
+  text-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
 }
 
 .tagline {
@@ -805,11 +946,22 @@ button:hover {
   cursor: pointer;
   border: none;
   transition: all 0.3s ease;
+  
+  /* 3D Button */
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  position: relative;
 }
 
-.hero-btn:hover {
-  transform: scale(1.06);
-  box-shadow: 0 0 25px gold;
+@media (hover: hover) {
+  .hero-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(245, 197, 66, 0.4);
+  }
+  
+  .hero-btn:active {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(245, 197, 66, 0.2);
+  }
 }
 
 .hero-note {
@@ -875,10 +1027,30 @@ button:hover {
   z-index: 99999;
   cursor: pointer;
   gap: 10px;
+  
+  /* 3D Floating Effect */
+  animation: floatCart 3s ease-in-out infinite;
+}
+
+@keyframes floatCart {
+  0%, 100% { 
+    transform: translateX(-50%) translateY(0px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+  }
+  50% { 
+    transform: translateX(-50%) translateY(-6px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+  }
 }
 
 #floating-cart.visible {
   display: flex !important;
+}
+
+#floating-cart:active {
+  animation: none;
+  transform: translateX(-50%) translateY(0px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.25);
 }
 
 #floating-cart #cart-summary {
@@ -894,6 +1066,14 @@ button:hover {
   font-size: 13px;
   white-space: nowrap;
   flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+@media (hover: hover) {
+  #floating-cart:hover .view-text {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+  }
 }
 
 /* Extra small screens (mobile phones) */

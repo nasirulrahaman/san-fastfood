@@ -62,7 +62,7 @@ const menuData = {
     {name:"Beef Tikka", price:5, img:"images/snacks/beef.jpg"},
     {name:"Medu Vada", price:10, img:"images/snacks/m.jpg"},
     {name:"Dal Vada", price:5, img:"images/snacks/dal.jpg"},
-    {name:"Mini Samosa (4 piece)", price:20, img:"images/snacks/mini.jpg"},
+    {name:"Mini Samosa (6 piece)", price:20, img:"images/snacks/mini.jpg"},
     {name:"Soya Stick", price:10, img:"images/snacks/soya.jpg"},
     {name:"Sandwich (1 plate)", price:15, img:"images/snacks/sandwich.jpg"},
     {name:"Laccha Patties", price:20, img:"images/snacks/l.jpg"},
@@ -82,7 +82,14 @@ const menuData = {
   drinks: [
     {name:"Tea", price:5, img:"images/drinks/t.jpg"},
     {name:"Coffee", price:10, img:"images/drinks/c.jpg"},
-    {name:"Lassi", price:25, img:"images/drinks/l.jpg"}
+    {name:"Lassi", price:15, img:"images/drinks/l.jpg"}
+  ],
+
+  pizza: [
+    {name:"Chicken Pizza (Large)", price:180, img:"images/pizza/p.jpg"},
+    {name:"Chicken Pizza (Small)", price:100, img:"images/pizza/ps.jpg"},
+    {name:"Paneer Pizza (Large)", price:150, img:"images/pizza/pal.jpg"},
+    {name:"Paneer Pizza (Small)", price:90, img:"images/pizza/pas.jpg"}
   ]
 };
 
@@ -542,6 +549,122 @@ function closeCart() {
   
   // Restore body scroll
   document.body.style.overflow = "";
-
 }
 
+/* ===== 3D TOUCH INTERACTION (MOBILE) ===== */
+document.addEventListener('DOMContentLoaded', function() {
+  // Add touch-based depth effect to menu items
+  const menuItems = document.querySelectorAll('.item');
+  
+  menuItems.forEach(item => {
+    item.addEventListener('touchstart', function(e) {
+      this.classList.add('active-tap');
+    });
+    
+    item.addEventListener('touchend', function(e) {
+      this.classList.remove('active-tap');
+    });
+  });
+  
+  // Add press effect to buttons
+  const buttons = document.querySelectorAll('button');
+  
+  buttons.forEach(button => {
+    button.addEventListener('touchstart', function(e) {
+      // Create ripple effect
+      const ripple = document.createElement('span');
+      ripple.style.position = 'absolute';
+      ripple.style.pointerEvents = 'none';
+      
+      const rect = this.getBoundingClientRect();
+      const touch = e.touches[0];
+      const x = touch.clientX - rect.left;
+      const y = touch.clientY - rect.top;
+      
+      ripple.style.left = x + 'px';
+      ripple.style.top = y + 'px';
+      ripple.style.width = '20px';
+      ripple.style.height = '20px';
+      ripple.style.backgroundColor = 'rgba(255, 255, 255, 0.5)';
+      ripple.style.borderRadius = '50%';
+      ripple.style.animation = 'rippleAnimation 0.6s ease-out';
+      
+      this.style.position = 'relative';
+      this.style.overflow = 'hidden';
+      this.appendChild(ripple);
+      
+      setTimeout(() => ripple.remove(), 600);
+    });
+  });
+});
+
+// Ripple animation keyframe (injected dynamically if not in CSS)
+if (!document.getElementById('ripple-style')) {
+  const style = document.createElement('style');
+  style.id = 'ripple-style';
+  style.innerHTML = `
+    @keyframes rippleAnimation {
+      from {
+        transform: scale(0);
+        opacity: 1;
+      }
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+    
+    /* Add slight tilt to category buttons on mobile */
+    @media (max-width: 768px) {
+      .categories button:active {
+        transform: perspective(500px) rotateY(-2deg) rotateX(1deg) scale(0.98);
+      }
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+/* ===== CART ADD ANIMATION ===== */
+function addToCart(category, index) {
+  const menuDiv = document.getElementById('menu');
+  const items = menuDiv.querySelectorAll('.item');
+  
+  if (items[index]) {
+    const item = items[index];
+    
+    // Create add animation
+    const addBtn = item.querySelector('button');
+    if (addBtn) {
+      addBtn.style.animation = 'none';
+      setTimeout(() => {
+        addBtn.style.animation = 'addPulse 0.4s ease-out';
+      }, 10);
+    }
+  }
+  
+  // Call the original cart add function
+  addCart(category, index);
+}
+
+// Add keyframe for add-to-cart pulse
+if (!document.getElementById('add-pulse-style')) {
+  const style = document.createElement('style');
+  style.id = 'add-pulse-style';
+  style.innerHTML = `
+    @keyframes addPulse {
+      0% {
+        transform: scale(1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      }
+      50% {
+        transform: scale(0.95);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      }
+      100% {
+        transform: scale(1);
+        box-shadow: 0 4px 12px rgba(245, 197, 66, 0.3);
+      }
+    }
+  `;
+  document.head.appendChild(style);
+}
