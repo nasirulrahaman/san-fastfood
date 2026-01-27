@@ -413,3 +413,11 @@ window.addEventListener('load', () => {
     }
   }, 2000);
 });
+
+// ===== MAKE FUNCTIONS GLOBALLY ACCESSIBLE FOR ONCLICK HANDLERS =====
+window.loadOrders = loadOrders;
+window.filterOrders = filterOrders;
+window.toggleAutoRefresh = toggleAutoRefresh;
+window.exportOrders = exportOrders;
+
+console.log('✅ Admin panel functions loaded and globally accessible');
