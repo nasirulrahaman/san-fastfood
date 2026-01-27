@@ -86,10 +86,10 @@ const menuData = {
   ],
 
   pizza: [
-    {name:"Chicken Pizza (Large)", price:180, img:"images/pizza/p.jpg"},
-    {name:"Chicken Pizza (Small)", price:100, img:"images/pizza/ps.jpg"},
-    {name:"Paneer Pizza (Large)", price:150, img:"images/pizza/pal.jpg"},
-    {name:"Paneer Pizza (Small)", price:90, img:"images/pizza/pas.jpg"}
+    {name:"Chicken Pizza ", price:120, img:"images/pizza/p.jpg"},
+  
+    {name:"Paneer Pizza ", price:120, img:"images/pizza/pal.jpg"},
+    
   ]
 };
 
@@ -667,4 +667,5 @@ if (!document.getElementById('add-pulse-style')) {
     }
   `;
   document.head.appendChild(style);
+
 }
