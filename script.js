@@ -86,10 +86,9 @@ const menuData = {
   ],
 
   pizza: [
-    {name:"Chicken Pizza ", price:120, img:"images/pizza/p.jpg"},
-  
-    {name:"Paneer Pizza ", price:120, img:"images/pizza/pal.jpg"},
-    
+   
+    {name:"Chicken Pizza (Small)", price:120, img:"images/pizza/ps.jpg"},
+    {name:"Paneer Pizza (Small)", price:120, img:"images/pizza/pas.jpg"}
   ]
 };
 
@@ -132,9 +131,14 @@ function handleSearch() {
   } else {
     searchResults.forEach(item => {
       const safeId = item.name.replace(/\s+/g, "_");
+      const pizzaInfo = getPizzaInfo(item.name);
+      const isPizza = item.name.toLowerCase().includes('pizza') && pizzaInfo.size;
+      const sizeBadge = isPizza ? `<span class="size-badge size-${pizzaInfo.size.toLowerCase()}">${pizzaInfo.size}</span>` : '';
+      
       menu.innerHTML += `
-        <div class="item">
+        <div class="item ${isPizza ? 'pizza-item' : ''}">
           <img src="${item.img}">
+          ${sizeBadge}
           <h3>${item.name}</h3>
           <p>₹${item.price}</p>
           <div class="qty">
@@ -154,6 +158,14 @@ function clearSearch() {
   if (lastSelectedCategory) {
     showMenu(lastSelectedCategory);
   }
+}
+
+// Helper function to detect pizza size and extract name
+function getPizzaInfo(itemName) {
+  const isLarge = itemName.toLowerCase().includes('(large)') || itemName.toLowerCase().includes('large)');
+  const isSmall = itemName.toLowerCase().includes('(small)') || itemName.toLowerCase().includes('small)');
+  const size = isLarge ? 'Large' : isSmall ? 'Small' : null;
+  return { size, isLarge, isSmall };
 }
 
 function showMenu(category) {
@@ -201,10 +213,14 @@ function showMenu(category) {
     }
 
     const safeId = item.name.replace(/\s+/g, "_");
+    const pizzaInfo = getPizzaInfo(item.name);
+    const isPizza = category === 'pizza' && pizzaInfo.size;
+    const sizeBadge = isPizza ? `<span class="size-badge size-${pizzaInfo.size.toLowerCase()}">${pizzaInfo.size}</span>` : '';
 
     menu.innerHTML += `
-      <div class="item">
+      <div class="item ${isPizza ? 'pizza-item' : ''}">
         <img src="${item.img}" alt="${item.name}">
+        ${sizeBadge}
         <h3>${item.name}</h3>
         <p>₹${item.price}</p>
         <div class="qty">
@@ -667,6 +683,4 @@ if (!document.getElementById('add-pulse-style')) {
     }
   `;
   document.head.appendChild(style);
-
 }
-
