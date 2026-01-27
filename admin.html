@@ -464,7 +464,27 @@
 </div>
 
 <script src="supabase-config.js"></script>
-<script src="admin.js"></script>
+<script>
+  // Wait for Supabase to be fully initialized before loading admin.js
+  function waitForSupabase() {
+    if (window.supabaseInitialized && window.supabase) {
+      console.log('✅ Supabase is ready - loading admin.js');
+      const script = document.createElement('script');
+      script.src = 'admin.js';
+      document.body.appendChild(script);
+    } else {
+      console.log('⏳ Waiting for Supabase...');
+      setTimeout(waitForSupabase, 100);
+    }
+  }
+  
+  // Start waiting for Supabase
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', waitForSupabase);
+  } else {
+    setTimeout(waitForSupabase, 100);
+  }
+</script>
 
 </body>
 </html>

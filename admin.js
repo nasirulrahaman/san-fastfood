@@ -11,21 +11,49 @@ let autoRefreshInterval = null;
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
   console.log('Admin panel loaded');
-  loadOrders();
+  waitForSupabaseAndLoad();
   
   // Verify Supabase is initialized
   setTimeout(() => {
-    if (!window.supabase) {
+    if (!window.supabase || !window.supabaseInitialized) {
       showError('⚠️ Supabase not initialized. Check supabase-config.js configuration.');
     }
   }, 2000);
 });
 
 /**
+ * Wait for Supabase to be fully initialized, then load orders
+ */
+async function waitForSupabaseAndLoad() {
+  let attempts = 0;
+  const maxAttempts = 50; // Wait up to 5 seconds (50 * 100ms)
+  
+  while (attempts < maxAttempts && (!window.supabase || !window.supabaseInitialized)) {
+    await new Promise(resolve => setTimeout(resolve, 100));
+    attempts++;
+  }
+  
+  if (window.supabase && window.supabaseInitialized) {
+    console.log('✅ Supabase ready, loading orders...');
+    loadOrders();
+  } else {
+    console.error('❌ Supabase failed to initialize after waiting');
+    showError('❌ Failed to initialize database. Please refresh the page.');
+  }
+}
+
+/**
  * Load orders from Supabase
  */
 async function loadOrders() {
   const container = document.getElementById('ordersContainer');
+  
+  // Check if Supabase is initialized
+  if (!window.supabase || !window.supabaseInitialized) {
+    container.innerHTML = '<div class="error" style="padding: 20px;">❌ Database not initialized. Please refresh the page.</div>';
+    return;
+  }
+  
   container.innerHTML = '<div class="loading">Loading orders...</div>';
 
   try {
@@ -48,6 +76,7 @@ async function loadOrders() {
   } catch (err) {
     console.error('Error loading orders:', err);
     showError('Failed to load orders. Check console for details.');
+    container.innerHTML = `<div class="error" style="padding: 20px;">❌ Error: ${err.message}</div>`;
   }
 }
 
