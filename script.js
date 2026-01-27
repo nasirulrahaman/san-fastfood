@@ -62,7 +62,7 @@ const menuData = {
     {name:"Beef Tikka", price:5, img:"images/snacks/beef.jpg"},
     {name:"Medu Vada", price:10, img:"images/snacks/m.jpg"},
     {name:"Dal Vada", price:5, img:"images/snacks/dal.jpg"},
-    {name:"Mini Samosa (6 piece)", price:20, img:"images/snacks/mini.jpg"},
+    {name:"Mini Samosa (4 piece)", price:20, img:"images/snacks/mini.jpg"},
     {name:"Soya Stick", price:10, img:"images/snacks/soya.jpg"},
     {name:"Sandwich (1 plate)", price:15, img:"images/snacks/sandwich.jpg"},
     {name:"Laccha Patties", price:20, img:"images/snacks/l.jpg"},
@@ -669,3 +669,4 @@ if (!document.getElementById('add-pulse-style')) {
   document.head.appendChild(style);
 
 }
+
