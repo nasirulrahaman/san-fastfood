@@ -1,4 +1,4 @@
-console.log("JS loaded");
+console.log("JS loaded")
 
 // ===== FIREBASE (OPTIONAL - will gracefully fail if unavailable) =====
 let db = null;
@@ -87,8 +87,8 @@ const menuData = {
 
   pizza: [
    
-    {name:"Chicken Pizza (Small)", price:120, img:"images/pizza/ps.jpg"},
-    {name:"Paneer Pizza (Small)", price:120, img:"images/pizza/pas.jpg"}
+    {name:"Chicken Pizza ", price:120, img:"images/pizza/ps.jpg"},
+    {name:"Paneer Pizza ", price:120, img:"images/pizza/pas.jpg"}
   ]
 };
 
@@ -683,4 +683,5 @@ if (!document.getElementById('add-pulse-style')) {
     }
   `;
   document.head.appendChild(style);
+
 }
