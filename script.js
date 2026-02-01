@@ -1,4 +1,4 @@
-console.log("JS loaded")
+console.log("JS loaded");
 
 // ===== FIREBASE (OPTIONAL - will gracefully fail if unavailable) =====
 let db = null;
@@ -16,7 +16,7 @@ const menuData = {
     {name:"Egg Biryani", price:70, img:"images/rice/egg-biryani.jpg"},
     {name:"Chicken Biryani", price:90, img:"images/rice/2.jpg"},
     {name:"Chicken Biryani (with egg)", price:99, img:"images/rice/withegg.jpg"},
-    {name:"Beef Biryani", price:110, img:"images/rice/beef.jpg"},
+    
     {name:"Lemon Rice (with chicken 65)", price:80, img:"images/rice/lemon.jpg"},
     {name:"Tomato Rice (with chicken 65 & egg)", price:90, img:"images/rice/tomato-rice.jpg"},
     {name:"Jeera Rice (with chicken 65)", price:70, img:"images/rice/jeera.jpg"}
@@ -87,8 +87,8 @@ const menuData = {
 
   pizza: [
    
-    {name:"Chicken Pizza ", price:120, img:"images/pizza/ps.jpg"},
-    {name:"Paneer Pizza ", price:120, img:"images/pizza/pas.jpg"}
+    {name:"Chicken Pizza (Small)", price:120, img:"images/pizza/ps.jpg"},
+    {name:"Paneer Pizza (Small)", price:120, img:"images/pizza/pas.jpg"}
   ]
 };
 
@@ -683,5 +683,4 @@ if (!document.getElementById('add-pulse-style')) {
     }
   `;
   document.head.appendChild(style);
-
 }
