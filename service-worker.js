@@ -1,5 +1,5 @@
 const CACHE_NAME = 'san-cache-v7';
-const RUNTIME_CACHE = 'san-runtime-cache-v5';
+const RUNTIME_CACHE = 'san-runtime-cache-v6';
 
 const STATIC_ASSETS = [
   './',
@@ -88,6 +88,7 @@ self.addEventListener('fetch', event => {
       .catch(() => new Response('Offline', { status: 503 }))
   );
 });
+
 
 
 
