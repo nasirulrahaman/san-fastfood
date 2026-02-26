@@ -37,21 +37,21 @@ const menuData = {
   ],
 
   chicken: [
-    {name:"Chicken 65", price:40, img:"images/chicken/65.jpg"},
+    {name:"Chicken 65", price:50, img:"images/chicken/65.jpg"},
     {name:"Chicken Tandoori", price:80, img:"images/chicken/tandoori.jpg"},
     {name:"Chicken Leg Piece", price:50, img:"images/chicken/leg.jpg"},
     {name:"Chicken Lollipop", price:20, img:"images/chicken/lollipop.jpg"},
     {name:"Chicken Kosa", price:80, img:"images/chicken/kosa.jpg"},
-    {name:"Butter Chicken", price:50, img:"images/chicken/butter.jpg"},
-    {name:"Chicken Keema", price:40, img:"images/chicken/keema.jpg"},
+    {name:"Butter Chicken", price:70, img:"images/chicken/butter.jpg"},
+    {name:"Chicken Keema", price:50, img:"images/chicken/keema.jpg"},
     {name:"Chilli Chicken", price:50, img:"images/chicken/chilli.jpg"},
-    {name:"Chicken Stick ( per stick)", price:20, img:"images/chicken/chi.jpg"}
+    {name:"Chicken Stick ( per stick)", price:25, img:"images/chicken/chi.jpg"}
   ],
 
   momo: [
     {name:"Steam Momo (8 piece)", price:50, img:"images/momo/steam.jpg"},
     {name:"Fry Momo (8 piece)", price:60, img:"images/momo/fry.jpg"},
-    {name:"Kurkure Momo (8 piece)", price:60, img:"images/momo/k.jpg"},
+    {name:"Kurkure Momo (8 piece)", price:70, img:"images/momo/k.jpg"},
     {name:"Veg Momo (8 piece)", price:40, img:"images/momo/veg.jpg"}
   ],
 
@@ -64,7 +64,7 @@ const menuData = {
     {name:"Dal Vada", price:5, img:"images/snacks/dal.jpg"},
     {name:"Mini Samosa (4 piece)", price:20, img:"images/snacks/mini.jpg"},
     {name:"Soya Stick", price:10, img:"images/snacks/soya.jpg"},
-    {name:"Sandwich (1 plate)", price:15, img:"images/snacks/sandwich.jpg"},
+    {name:"Sandwich (1 plate)", price:20, img:"images/snacks/sandwich.jpg"},
     {name:"Laccha Patties", price:20, img:"images/snacks/l.jpg"},
     {name:"Aloo Chop", price:5, img:"images/snacks/a.jpg"},
     {name:"Piyaji", price:5, img:"images/snacks/piyaji.jpg"},
@@ -82,7 +82,7 @@ const menuData = {
   drinks: [
     {name:"Tea", price:5, img:"images/drinks/t.jpg"},
     {name:"Coffee", price:10, img:"images/drinks/c.jpg"},
-    {name:"Lassi", price:15, img:"images/drinks/l.jpg"}
+    {name:"Lassi", price:30, img:"images/drinks/l.jpg"}
   ],
 
   pizza: [
