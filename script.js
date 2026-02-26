@@ -27,7 +27,7 @@ const menuData = {
     {name:"Masala Dosa", price:25, img:"images/breakfast/m.jpg"},
     {name:"Butter Naan", price:10, img:"images/breakfast/butter.jpg"},
     {name:"Idly (1 plate)", price:20, img:"images/breakfast/idly.jpg"},
-    {name:"Dal Puri", price:5, img:"images/breakfast/dal.jpg"},
+    {name:"Dal Puri(3 pieces)", price:10, img:"images/breakfast/dal.jpg"},
     {name:"Dhuki", price:10, img:"images/breakfast/dhuki.jpg"},
     {name:"Paratha", price:10, img:"images/breakfast/p.jpg"},
     {name:"Chicken Chawmin", price:40, img:"images/breakfast/c.jpg"},
@@ -89,6 +89,8 @@ const menuData = {
    
     {name:"Chicken Pizza (Small)", price:120, img:"images/pizza/ps.jpg"},
     {name:"Paneer Pizza (Small)", price:120, img:"images/pizza/pas.jpg"}
+    {name:"Paneer Pizza (Large)", price:180, img:"images/pizza/pas.jpg"}
+    {name:"Chicken Pizza (Large)", price:180, img:"images/pizza/ps.jpg"},
   ]
 };
 
