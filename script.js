@@ -88,8 +88,8 @@ const menuData = {
   pizza: [
    
     {name:"Chicken Pizza (Small)", price:120, img:"images/pizza/ps.jpg"},
-    {name:"Paneer Pizza (Small)", price:120, img:"images/pizza/pas.jpg"}
-    {name:"Paneer Pizza (Large)", price:180, img:"images/pizza/pas.jpg"}
+    {name:"Paneer Pizza (Small)", price:120, img:"images/pizza/pas.jpg"},
+    {name:"Paneer Pizza (Large)", price:180, img:"images/pizza/pas.jpg"},
     {name:"Chicken Pizza (Large)", price:180, img:"images/pizza/ps.jpg"},
   ]
 };
