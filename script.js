@@ -38,7 +38,7 @@ const menuData = {
 
   chicken: [
     {name:"Chicken 65", price:50, img:"images/chicken/65.jpg"},
-    {name:"Chicken Tandoori", price:80, img:"images/chicken/tandoori.jpg"},
+    {name:"Chicken Tandoori", price:100, img:"images/chicken/tandoori.jpg"},
     {name:"Chicken Leg Piece", price:50, img:"images/chicken/leg.jpg"},
     {name:"Chicken Lollipop", price:20, img:"images/chicken/lollipop.jpg"},
     {name:"Chicken Kosa", price:80, img:"images/chicken/kosa.jpg"},
@@ -59,7 +59,7 @@ const menuData = {
     {name:"Potato Smile (6 piece)", price:25, img:"images/snacks/sm.jpg"},
     {name:"Dahi Vada (1 plate)", price:20, img:"images/snacks/D.jpg"},
     {name:"French Fries", price:40, img:"images/snacks/f.jpg"},
-    {name:"Beef Tikka", price:5, img:"images/snacks/beef.jpg"},
+    {name:"Beef Tikka(2 pieces)", price:15, img:"images/snacks/beef.jpg"},
     {name:"Medu Vada", price:10, img:"images/snacks/m.jpg"},
     {name:"Dal Vada", price:5, img:"images/snacks/dal.jpg"},
     {name:"Mini Samosa (4 piece)", price:20, img:"images/snacks/mini.jpg"},
