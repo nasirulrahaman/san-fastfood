@@ -1,5 +1,5 @@
-const CACHE_NAME = 'san-cache-v8';
-const RUNTIME_CACHE = 'san-runtime-cache-v8';
+const CACHE_NAME = 'san-cache-v3';
+const RUNTIME_CACHE = 'san-runtime-cache-v3';
 
 const STATIC_ASSETS = [
   './',
@@ -28,7 +28,16 @@ self.addEventListener('activate', event => {
           }
         })
       )
-    ).then(() => self.clients.claim())
+    )
+    // take control of pages immediately
+    .then(() => self.clients.claim())
+    // notify clients so they can reload
+    .then(() => self.clients.matchAll())
+    .then(clients => {
+      clients.forEach(client => {
+        client.postMessage({type: 'SW_UPDATED'});
+      });
+    })
   );
 });
 
@@ -88,10 +97,3 @@ self.addEventListener('fetch', event => {
       .catch(() => new Response('Offline', { status: 503 }))
   );
 });
-
-
-
-
-
-
-
