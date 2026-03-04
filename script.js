@@ -57,7 +57,7 @@ const menuData = {
 
   snacks: [
     {name:"Potato Smile (6 piece)", price:25, img:"images/snacks/sm.jpg"},
-    {name:"Dahi Vada (1 plate)", price:20, img:"images/snacks/D.jpg"},
+    {name:"Dahi Vada (1 plate)", price:25, img:"images/snacks/D.jpg"},
     {name:"French Fries", price:40, img:"images/snacks/f.jpg"},
     {name:"Beef Tikka(2 pieces)", price:15, img:"images/snacks/beef.jpg"},
     {name:"Medu Vada", price:10, img:"images/snacks/m.jpg"},
